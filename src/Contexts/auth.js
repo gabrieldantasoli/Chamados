@@ -5,8 +5,7 @@ import { Navigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
-import { doc, getFirestore, setDoc , collection, addDoc, updateDoc, getDoc } from "firebase/firestore"; 
-import { async } from "@firebase/util";
+import { doc, getFirestore, setDoc , collection, addDoc, updateDoc, getDoc } from "firebase/firestore";
 
 export const AuthContext = createContext({});
 
@@ -15,11 +14,11 @@ export const AuthProvider = ({children}) => {
     const database = getFirestore(app);
 
     useEffect(() => {
-        const loadStoreAuth = () => {
+        const loadStoreAuth = async () => {
             const sessionToken = sessionStorage.getItem("@AuthFirebase:token");
             const sessionUSer = sessionStorage.getItem("@AuthFirebase:user");
             if (sessionToken && sessionUSer) {
-                setUser(sessionUSer);
+                setUser("null");
             }
         };
 
@@ -45,13 +44,14 @@ export const AuthProvider = ({children}) => {
                 avatarURL: userProfile.data().avatarURL,
                 email: user.email
             }
+
+            localStorage.setItem("@AuthFIrebase:data", JSON.stringify(data));
             setUser(data);
             toast.success("Welcome!");
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            alert(errorMessage)
             toast.error(errorMessage.split("(")[1].split(")")[0].replace("auth/","Error :  ").replaceAll("-"," "));
         })
     };
@@ -76,7 +76,6 @@ export const AuthProvider = ({children}) => {
                     email: user.email,
                     avatarURL: null
                 }
-                localStorage.setItem("user", JSON.stringify(data));
                 setUser(data);
             })
 
@@ -93,12 +92,16 @@ export const AuthProvider = ({children}) => {
         signOut(auth);
         sessionStorage.clear();
         setUser(null);
-        toast.success("log out")
+        toast.success("logged out")
         return <Navigate to="/" />;
     }
 
+    async function loadUSer() {
+        setUser(JSON.parse(localStorage.getItem("@AuthFIrebase:data")));
+    }
+
     return(
-        <AuthContext.Provider value={{signed: !!user , SignInWithEmail, SignUpWithEmail, SignOut, user }}>
+        <AuthContext.Provider value={{signed: !!user , SignInWithEmail, SignUpWithEmail, SignOut, user, loadUSer }}>
             {children}
         </AuthContext.Provider>
     )
