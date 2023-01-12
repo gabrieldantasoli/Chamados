@@ -2,6 +2,8 @@
 import { AuthContext } from '../../Contexts/auth';
 import { useContext } from 'react';
 
+import Header from '../../components/Header';
+
 export default () => {
     
     // Using context starts
@@ -14,6 +16,9 @@ export default () => {
 
     return (
         <div>
+            <Header />
+
+            
             logged!
             <button onClick={logOut}>Log out</button>
         </div>

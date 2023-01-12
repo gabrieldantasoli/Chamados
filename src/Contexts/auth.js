@@ -3,6 +3,8 @@ import { app } from '../services/firebaseConection';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Navigate } from "react-router-dom";
 
+import { toast } from "react-toastify";
+
 export const AuthContext = createContext({});
 
 export const AuthProvider = ({children}) => {
@@ -21,22 +23,21 @@ export const AuthProvider = ({children}) => {
 
     const auth = getAuth(app);
     const [user, setUser] = useState(null);
-    const [message, setMessage] = useState("");
 
     const SignInWithEmail = (email, password) => {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
             setUser(user);
-            sessionStorage.setItem("@AuthFirebase:token", "wwwww");
+            sessionStorage.setItem("@AuthFirebase:token", userCredential.user.accessToken);
             sessionStorage.setItem("@AuthFirebase:user", JSON.stringify(user));
             console.log(userCredential)
+            toast.success("Welcome!");
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            setMessage(errorMessage.split("(")[1].split(")")[0].replace("auth/","Error :  ").replaceAll("-"," "));
-            setTimeout(() => setMessage(""),7000)
+            toast.error(errorMessage.split("(")[1].split(")")[0].replace("auth/","Error :  ").replaceAll("-"," "));
         })
     };
 
@@ -44,26 +45,24 @@ export const AuthProvider = ({children}) => {
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            console.log(user);
-            setMessage("User registered!");
-            setTimeout(() => setMessage(""),7000)
+            toast.success("User registered!");
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            setMessage(errorMessage.split("(")[1].split(")")[0].replace("auth/","Error :  ").replaceAll("-"," "));
-            setTimeout(() => setMessage(""),7000)
+            toast.error(errorMessage.split("(")[1].split(")")[0].replace("auth/","Error :  ").replaceAll("-"," "));
         }) 
     }
 
     function SignOut() {
         sessionStorage.clear();
         setUser(null);
+        toast.success("log out")
         return <Navigate to="/" />;
     }
 
     return(
-        <AuthContext.Provider value={{signed: !!user , SignInWithEmail, SignUpWithEmail, SignOut, user , message}}>
+        <AuthContext.Provider value={{signed: !!user , SignInWithEmail, SignUpWithEmail, SignOut, user }}>
             {children}
         </AuthContext.Provider>
     )

@@ -8,7 +8,7 @@ import { AuthContext } from '../../Contexts/auth';
 export default () => {
 
     // Using context starts
-    const { user , SignInWithEmail , signed , message } = useContext(AuthContext);
+    const { user , SignInWithEmail , signed } = useContext(AuthContext);
 
     async function LoginEmail() {
         await SignInWithEmail(email, password);
@@ -22,7 +22,6 @@ export default () => {
     if (!signed) {
         return(
             <div className="logIn">
-                <div id={message === "User registered!" ? "register" : "error"} className={message !== "" ? 'active' : ''}>{message}</div>
                 <div> 
                     <div className='logo'>
                         <img src={User} alt="user icon" />
