@@ -21,6 +21,7 @@ export const AuthProvider = ({children}) => {
 
     const auth = getAuth(app);
     const [user, setUser] = useState(null);
+    const [message, setMessage] = useState("");
 
     const SignInWithEmail = (email, password) => {
         signInWithEmailAndPassword(auth, email, password)
@@ -34,7 +35,8 @@ export const AuthProvider = ({children}) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            alert(errorMessage)
+            setMessage(errorMessage.split("(")[1].split(")")[0].replace("auth/","Error :  ").replaceAll("-"," "));
+            setTimeout(() => setMessage(""),7000)
         })
     };
 
@@ -43,11 +45,14 @@ export const AuthProvider = ({children}) => {
         .then((userCredential) => {
             const user = userCredential.user;
             console.log(user);
+            setMessage("User registered!");
+            setTimeout(() => setMessage(""),7000)
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            alert(errorMessage)
+            setMessage(errorMessage.split("(")[1].split(")")[0].replace("auth/","Error :  ").replaceAll("-"," "));
+            setTimeout(() => setMessage(""),7000)
         }) 
     }
 
@@ -58,7 +63,7 @@ export const AuthProvider = ({children}) => {
     }
 
     return(
-        <AuthContext.Provider value={{signed: !!user , SignInWithEmail, SignUpWithEmail, SignOut, user}}>
+        <AuthContext.Provider value={{signed: !!user , SignInWithEmail, SignUpWithEmail, SignOut, user , message}}>
             {children}
         </AuthContext.Provider>
     )
