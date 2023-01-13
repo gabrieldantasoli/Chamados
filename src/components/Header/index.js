@@ -28,12 +28,12 @@ export default () => {
                 Chamados
             </Link>
 
-            <Link to="/dashboard">
+            <Link to="/costumers">
                 <FiUser />
                 Clients
             </Link>
 
-            <Link to="/dashboard">
+            <Link to="/profile">
                 <FiSettings />
                 Settings
             </Link>
