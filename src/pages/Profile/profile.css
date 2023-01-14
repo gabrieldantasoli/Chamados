@@ -80,7 +80,7 @@
     padding: 1em;
 }
 
-input {
+input ,  textarea , select {
     width: 100%;
     max-width: 400px;
     padding: 5px 10px;

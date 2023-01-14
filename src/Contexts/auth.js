@@ -76,15 +76,6 @@ export const AuthProvider = ({children}) => {
                 name: "UNKNOWN",
                 avatarURL: null,
             })
-            .then(() => {
-                let data = {
-                    uid: uid,
-                    name: name,
-                    email: user.email,
-                    avatarURL: null
-                }
-                setUser(data);
-            })
 
             toast.success("User registered!");
         })
@@ -158,6 +149,7 @@ export const AuthProvider = ({children}) => {
         sessionStorage.clear();
         setUser(null);
         toast.success("logged out")
+        localStorage.clear()
         return <Navigate to="/" />;
     }
 

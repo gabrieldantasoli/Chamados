@@ -6,6 +6,7 @@ import SignUp from "../pages/SignUp";
 import DashBoard from '../pages/DashBoard';
 import Profile from "../pages/Profile";
 import Costumers from "../pages/Costumers";
+import New from "../pages/New";
 
 export default () => {
     return(
@@ -23,6 +24,10 @@ export default () => {
             
             <Route path="/costumers" element={<PrivateRoutes />} >
                 <Route path="/costumers" element={<Costumers />} />
+            </Route>
+
+            <Route path="/new" element={<PrivateRoutes />} >
+                <Route path="/new" element={<New />} />
             </Route>
 
         </Routes>
