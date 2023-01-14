@@ -47,13 +47,15 @@
     display: none;
 }
 
-.label-avatar svg {
+.label-avatar svg,
+.label-avatar p {
     font-size: 40px;
     font-weight: bold;
     position: absolute;
     opacity: 0.7;
     color: #f8f8f8;
     transition: ease-in-out 0.5s;
+    text-shadow: 0 0 10px #000;
 }
 
 .label-avatar:hover svg {

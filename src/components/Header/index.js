@@ -9,7 +9,7 @@ import { FiHome , FiUser , FiSettings } from "react-icons/fi";
 import { Link } from 'react-router-dom';
 
 export default () => {
-    const { user , loadUSer } = useContext(AuthContext);
+    const { user , loadUSer , imgURL } = useContext(AuthContext);
 
     if (user === "null") {
         loadUSer();
@@ -19,7 +19,7 @@ export default () => {
         <div className='sidebar'>
             <div className='img'>
                 <div>
-                    <img src={user.avatarURL === null ? Avatar : user.avatarURL} alt="Avatar image" />
+                    <img src={imgURL === null ? Avatar : imgURL} alt="Avatar image" />
                 </div>
             </div>
 

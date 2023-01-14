@@ -1,13 +1,13 @@
 
 import { AuthContext } from '../../Contexts/auth';
-import { useContext } from 'react';
+import { useContext , useEffect} from 'react';
 
 import Header from '../../components/Header';
 
 export default () => {
     
     // Using context starts
-    const { user , SignOut } = useContext(AuthContext);
+    const { user , SignOut , loadUser } = useContext(AuthContext);
 
     async function logOut() {
         await SignOut();
