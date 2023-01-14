@@ -34,9 +34,10 @@
 .sidebar img {
     opacity: 1;
     width: 150px;
+    aspect-ratio: 1 / 1;
     z-index: 2;
     border-radius: 50%;
-    box-shadow: 0 0 10px #fff;
+    background-color: #000;
     transition: ease 0.6s;
     object-fit: cover;
 }

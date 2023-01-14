@@ -162,19 +162,9 @@ export const AuthProvider = ({children}) => {
     }
 
     async function loadUSer() {
-        let userCollection = collection(database, "users");
-        const userProfile = await getDoc(doc(userCollection, user.uid));
-        
-        let data = {
-            uid: user.uid,
-            name: userProfile.data().name,
-            avatarURL: userProfile.data().avatarURL,
-            email: user.email
-        }
-
-        localStorage.setItem("@AuthFIrebase:data", JSON.stringify(data));
-        setUser(data);
-        setImgURL(data.avatarURL);
+        let user = JSON.parse(localStorage.getItem("@AuthFIrebase:data"));
+        setUser(user);
+        setImgURL(user.avatarURL)
     }
 
     return(
