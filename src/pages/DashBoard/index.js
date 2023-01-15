@@ -1,14 +1,57 @@
 
 import './dashboard.css';
-import { useState} from 'react';
+import { useEffect, useState , useContext } from 'react';
 
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import { FiEdit2, FiMessageSquare, FiPlus, FiSearch } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { app } from '../../services/firebaseConection';
+import { collection, getFirestore , doc, getDocs } from 'firebase/firestore';
+import { AuthContext } from '../../Contexts/auth';
+import { toast } from 'react-toastify';
 
 export default () => {
-    const [calls , setCalls] = useState([111]);
+    const [calls , setCalls] = useState([]);
+    const [loading , setLoading] = useState(true);
+
+    const database = getFirestore(app);
+    const { user } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (user) {
+            loadCalls(user.uid)
+        }
+        
+        return () => {
+
+        }
+    }, [user]);
+
+    async function loadCalls(id) {
+        if (id !== null && id !== undefined) {
+            const callsRef = collection(database, "calls");
+            const userCallsRef = doc(callsRef, id);
+            const userCalls = collection(userCallsRef, "userCalls");
+            const data = await getDocs(userCalls)
+            .then((snapshot) => {
+                if (snapshot.size > 0) {
+                    let list = [];
+                    snapshot.forEach((doc) => {
+                        list.push(doc.data());
+                    })
+                    setCalls(list);
+                    console.log(list);
+                }
+            })
+            .catch((error) => {
+                toast.error("Error : Fail to load Call!")
+                setLoading(false);
+            })
+            setLoading(false);
+        }
+        
+    }
 
     return (
         <div>
@@ -25,14 +68,14 @@ export default () => {
                         <div>
                             <p>No call registered :(</p>
 
-                            <Link to="/costumers">
+                            <Link to="/new">
                                 <FiPlus />
                                 Add Call
                             </Link>
                         </div>
                     ) : (
                         <div className='calls'>
-                            <Link to="/costumers">
+                            <Link to="/new">
                                 <FiPlus />
                                 Add Call
                             </Link>

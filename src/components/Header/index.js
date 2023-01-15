@@ -38,8 +38,6 @@ export default () => {
                 Settings
             </Link>
 
-            <Link to="/new">new</Link>
-
         </div>
     )
 }

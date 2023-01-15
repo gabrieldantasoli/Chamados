@@ -6,11 +6,9 @@ import './new.css';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useState , useEffect , useContext } from 'react';
 import { AuthContext } from '../../Contexts/auth';
-import { async } from '@firebase/util';
 
 import { app } from '../../services/firebaseConection';
-import { getAuth } from 'firebase/auth';
-import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import { doc , collection, getDocs, getFirestore, addDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
 export default () => {
@@ -19,7 +17,7 @@ export default () => {
     const [customers , setCustomers] = useState([]);
 
     const [customerSelected , setCustomerSelected] = useState(0);
-    const [description , setDescription] = useState('');
+    const [description , setDescription] = useState('Suport');
     const [status , setStatus] = useState('Opened');
     const [problem , setProblem] = useState("");
 
@@ -61,8 +59,29 @@ export default () => {
         loadCustomers();
     }, []);
 
-    function newCall(e) {
+    async function newCall(e) {
         e.preventDefault();
+        //collection("collection").doc("documentId").collection("subcollection");
+        const callsRef = collection(database, "calls");
+        const userCallsRef = doc(callsRef, user.uid);
+        const userCalls = collection(userCallsRef, "userCalls");
+        await addDoc(userCalls,{
+            created: new Date(),
+            customer: customers[customerSelected].name,
+            customerId: customers[customerSelected].id,
+            description: description,
+            status: status,
+            problem: problem,
+        })
+        .then(() => {
+            toast.success("Call created ;)");
+            setProblem('');
+            setCustomerSelected(0);
+        })
+        .catch((error) => {
+            toast.error("Error: call not added!")
+        })
+       
     }
 
     function changeSelect(e) {
