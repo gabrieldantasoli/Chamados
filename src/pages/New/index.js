@@ -72,6 +72,7 @@ export default () => {
             description: description,
             status: status,
             problem: problem,
+            userId: user.uid
         })
         .then(() => {
             toast.success("Call created ;)");
